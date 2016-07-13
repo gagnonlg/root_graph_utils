@@ -11,7 +11,7 @@ ROOT.gROOT.SetBatch(True)
 atlas_utils.set_atlas_style()
 
 def from_ttrees(ttrees, labels, varexp, output, title=';;', condition=None,
-                dim=(600, 600), log=False, xlims=None):
+                geom='rectangle', log=False, xlims=None):
 
     n_hist = len(ttrees)
 
@@ -39,13 +39,16 @@ def from_ttrees(ttrees, labels, varexp, output, title=';;', condition=None,
             tree.Draw(exp, condition[i])
         hists.append(ROOT.gROOT.FindObject('hist{}{}'.format(i, uuid)))
 
-    from_hists(hists, labels, output, title, dim, log, xlims)
+    from_hists(hists, labels, output, title, geom, log, xlims)
 
 
 MAX_ = -float('inf')
 
-def from_hists(hists, labels, output, title=';;', dim=(600, 600), log=False,
+def from_hists(hists, labels, output, title=';;', geom='rectangle', log=False,
                xlims=None):
+
+    assert(geom in ['square', 'rectangle'])
+    dim = (800,600) if geom == 'rectangle' else (600,600)
 
     canvas = ROOT.TCanvas("canvas", "canvas", 0, 0, dim[0], dim[1])
     canvas.SetLogy(log)
@@ -72,7 +75,7 @@ def from_hists(hists, labels, output, title=';;', dim=(600, 600), log=False,
 
     txt = ROOT.TText()
     txt.SetNDC()
-    txt.DrawText(0.36, 0.87, 'Internal')
+    txt.DrawText(0.36 if dim[0] == 600 else 0.325, 0.87, 'Internal')
     atlas_utils.atlas_label(0.2, 0.87)
 
     canvas.SaveAs(output)
