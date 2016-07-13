@@ -11,7 +11,7 @@ ROOT.gROOT.SetBatch(True)
 atlas_utils.set_atlas_style()
 
 def from_ttrees(ttrees, labels, varexp, output, title=';;', condition=None,
-                geom='rectangle', log=False, xlims=None):
+                geom='rectangle', log=False, xlims=None, rebin=1):
 
     n_hist = len(ttrees)
 
@@ -39,13 +39,13 @@ def from_ttrees(ttrees, labels, varexp, output, title=';;', condition=None,
             tree.Draw(exp, condition[i])
         hists.append(ROOT.gROOT.FindObject('hist{}{}'.format(i, uuid)))
 
-    from_hists(hists, labels, output, title, geom, log, xlims)
+    from_hists(hists, labels, output, title, geom, log, xlims, rebin)
 
 
 MAX_ = -float('inf')
 
 def from_hists(hists, labels, output, title=';;', geom='rectangle', log=False,
-               xlims=None):
+               xlims=None, rebin=1):
 
     assert(geom in ['square', 'rectangle'])
     dim = (800,600) if geom == 'rectangle' else (600,600)
@@ -57,6 +57,7 @@ def from_hists(hists, labels, output, title=';;', geom='rectangle', log=False,
 
     for i, (hist, color) in enumerate(zip(hists, range(1,50))):
         hist.SetLineColor(color)
+        hist.Rebin(rebin)
         stk.Add(hist)
 
     stk.SetTitle(title)
