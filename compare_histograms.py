@@ -60,7 +60,11 @@ def from_hists(hists, labels, output, title=';;', dim=(600, 600), log=False,
     stk.SetMaximum(stk.GetMaximum('nostack')*(10 if log else 1.5))
     stk.Draw('nostack')
 
-    legend = ROOT.TLegend(0.8, 0.8, 0.9, 0.9)
+    if xlims is not None:
+        stk.GetXaxis().SetRangeUser(xlims[0],xlims[1])
+
+
+    legend = ROOT.TLegend(0.7, 0.7, 0.9, 0.9)
     legend.SetBorderSize(0)
     for i, (hist, lbl) in enumerate(zip(hists,labels)):
         legend.AddEntry(hist, lbl, 'L')
