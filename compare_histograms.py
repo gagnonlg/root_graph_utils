@@ -11,7 +11,7 @@ ROOT.gROOT.SetBatch(True)
 atlas_utils.set_atlas_style()
 
 def from_ttrees(ttrees, labels, varexp, output, title=';;', condition=None,
-                geom='rectangle', log=False, xlims=None, rebin=1):
+                geom='rectangle', log=False, xlims=None, ylims=None, rebin=1):
 
     n_hist = len(ttrees)
 
@@ -45,7 +45,7 @@ def from_ttrees(ttrees, labels, varexp, output, title=';;', condition=None,
 MAX_ = -float('inf')
 
 def from_hists(hists, labels, output, title=';;', geom='rectangle', log=False,
-               xlims=None, rebin=1):
+               xlims=None, ylims=None, rebin=1):
 
     assert(geom in ['square', 'rectangle'])
     dim = (800,600) if geom == 'rectangle' else (600,600)
@@ -61,7 +61,11 @@ def from_hists(hists, labels, output, title=';;', geom='rectangle', log=False,
         stk.Add(hist)
 
     stk.SetTitle(title)
-    stk.SetMaximum(stk.GetMaximum('nostack')*(10 if log else 1.5))
+    if ylims is None:
+        stk.SetMaximum(stk.GetMaximum('nostack')*(10 if log else 1.5))
+    else:
+        stk.SetMinimum(ylims[0])
+        stk.SetMaximum(ylims[1])
     stk.Draw('nostack')
 
     if xlims is not None:
