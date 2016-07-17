@@ -38,7 +38,7 @@ def from_ttrees(ttrees, labels, varexp, output, title=';;', condition=None,
 
     uuid = check_output('uuidgen')
 
-    exprs = ['{}>>hist{}{}'.format(n, i, uuid) for i,n in enumerate(varexp)]
+    exprs = ['{}'.format(n, i) for i,n in enumerate(varexp)]
 
     hists = []
 
