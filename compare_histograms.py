@@ -39,7 +39,7 @@ def from_ttrees(ttrees, labels, varexp, output, title=';;', condition=None,
             tree.Draw(exp, condition[i])
         hists.append(ROOT.gROOT.FindObject('hist{}{}'.format(i, uuid)))
 
-    from_hists(hists, labels, output, title, geom, log, xlims, rebin)
+    from_hists(hists, labels, output, title, geom, log, xlims, ylims, rebin)
 
 
 MAX_ = -float('inf')
