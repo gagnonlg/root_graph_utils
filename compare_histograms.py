@@ -10,7 +10,9 @@ __all__ = ['from_ttrees', 'from_hists']
 ROOT.gROOT.SetBatch(True)
 atlas_utils.set_atlas_style()
 
-def ttree_to_hist(tree, varexp, name, n=None, xmin=None, xmax=None, condition=None):
+def ttree_to_hist(tree, varexp, name=None, n=None, xmin=None, xmax=None, condition=None):
+    if name is None:
+        name = 'hist_{}'.format(varexp)
     exp = '{}>>{}'.format(varexp, name)
     if None not in [n,xmin,xmax]:
         exp = '{}({},{},{})'.format(exp,n,xmin,xmax)
