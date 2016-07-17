@@ -10,6 +10,16 @@ __all__ = ['from_ttrees', 'from_hists']
 ROOT.gROOT.SetBatch(True)
 atlas_utils.set_atlas_style()
 
+def ttree_to_hist(tree, varexp, name, n=None, xmin=None, xmax=None, condition=None):
+    exp = '{}>>{}'.format(varexp, name)
+    if None not in [n,xmin,xmax]:
+        exp = '{}({},{},{})'.format(exp,n,xmin,xmax)
+    if condition is None:
+        tree.Draw(exp)
+    else:
+        tree.Draw(exp, condition[i])
+    return ROOT.gROOT.FindObject(name)
+
 def from_ttrees(ttrees, labels, varexp, output, title=';;', condition=None,
                 geom='rectangle', log=False, xlims=None, ylims=None, rebin=1):
 
@@ -33,11 +43,7 @@ def from_ttrees(ttrees, labels, varexp, output, title=';;', condition=None,
     hists = []
 
     for i, (tree, exp) in enumerate(zip(ttrees, exprs)):
-        if condition is None:
-            tree.Draw(exp)
-        else:
-            tree.Draw(exp, condition[i])
-        hists.append(ROOT.gROOT.FindObject('hist{}{}'.format(i, uuid)))
+        hists.append(ttree_to_hist(tree, exp, 'hist{}{}'.format(i, uuid)))
 
     from_hists(hists, labels, output, title, geom, log, xlims, ylims, rebin)
 
